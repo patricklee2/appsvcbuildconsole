@@ -1,0 +1,22 @@
+[
+    {
+        "stack": "php",
+        "version": "5.6",
+        "baseImage": "mcr.microsoft.com/oryx/php-5.6:20190516.1"
+    },
+    {
+        "stack": "php",
+        "version": "7.0",
+        "baseImage": "mcr.microsoft.com/oryx/php-7.0:20190516.1"
+    },
+    {
+        "stack": "php",
+        "version": "7.2",
+        "baseImage": "mcr.microsoft.com/oryx/php-7.2:20190516.1"
+    },
+    {
+        "stack": "php",
+        "version": "7.3",
+        "baseImage": "mcr.microsoft.com/oryx/php-7.3:20190516.1"
+    }
+]
