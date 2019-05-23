@@ -1,17 +1,17 @@
 [
     {
         "stack": "python",
-        "version": "2.6",
-        "baseImage": "mcr.microsoft.com/oryx/python-2.6:20190516.1"
+        "version": "2.7",
+        "baseImageName": "mcr.microsoft.com/oryx/python-2.7:20190516.1"
     },
     {
         "stack": "python",
         "version": "3.6",
-        "baseImage": "mcr.microsoft.com/oryx/python-3.6:20190516.1"
+        "baseImageName": "mcr.microsoft.com/oryx/python-3.6:20190516.1"
     },
     {
         "stack": "python",
         "version": "3.7",
-        "baseImage": "mcr.microsoft.com/oryx/python-3.7:20190516.1"
+        "baseImageName": "mcr.microsoft.com/oryx/python-3.7:20190516.1"
     }
 ]

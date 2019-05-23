@@ -1,28 +1,27 @@
 [
-
+    {
+        "stack": "dotnetcore",
+        "version": "2.2",
+        "baseImageName": "oryxprod/dotnetcore-2.2:20190516.1"
+    },
     {
         "stack": "dotnetcore",
         "version": "2.1",
-        "baseImage": "oryxprod/dotnetcore-2.1:20190516.1"
+        "baseImageName": "oryxprod/dotnetcore-2.1:20190516.1"
     },
     {
         "stack": "dotnetcore",
         "version": "2.0",
-        "baseImage": "oryxprod/dotnetcore-2.0:20190516.1"
+        "baseImageName": "oryxprod/dotnetcore-2.0:20190516.1"
     },
     {
         "stack": "dotnetcore",
         "version": "1.1",
-        "baseImage": "oryxprod/dotnetcore-1.1:20190516.1"
+        "baseImageName": "oryxprod/dotnetcore-1.1:20190516.1"
     },
     {
         "stack": "dotnetcore",
         "version": "1.0",
-        "baseImage": "oryxprod/dotnetcore-1.0:20190516.1"
-    },
-    {
-        "stack": "dotnetcore",
-        "version": "2.2",
-        "baseImage": "oryxprod/dotnetcore-2.2:20190516.1"
+        "baseImageName": "oryxprod/dotnetcore-1.0:20190516.1"
     }
 ]
