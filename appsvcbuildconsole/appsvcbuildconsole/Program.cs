@@ -27,16 +27,16 @@ namespace appsvcbuildconsole
             //buildRequests.AddRange(JsonConvert.DeserializeObject<List<BuildRequest>>(text));
 
             text = File.ReadAllText("../../../dotnetcore.json");
-            //buildRequests.AddRange(JsonConvert.DeserializeObject<List<BuildRequest>>(text));
+            buildRequests.AddRange(JsonConvert.DeserializeObject<List<BuildRequest>>(text));
 
             text = File.ReadAllText("../../../node.json");
             //buildRequests.AddRange(JsonConvert.DeserializeObject<List<BuildRequest>>(text));
 
             text = File.ReadAllText("../../../php.json");
-            //buildRequests.AddRange(JsonConvert.DeserializeObject<List<BuildRequest>>(text));
+            buildRequests.AddRange(JsonConvert.DeserializeObject<List<BuildRequest>>(text));
 
             text = File.ReadAllText("../../../python.json");
-            //buildRequests.AddRange(JsonConvert.DeserializeObject<List<BuildRequest>>(text));
+            buildRequests.AddRange(JsonConvert.DeserializeObject<List<BuildRequest>>(text));
 
             text = File.ReadAllText("../../../ruby.json");
             buildRequests.AddRange(JsonConvert.DeserializeObject<List<BuildRequest>>(text));
@@ -52,11 +52,11 @@ namespace appsvcbuildconsole
         {
             Console.WriteLine(String.Format("making tag: {0} {1}", br.Stack, br.Version));
             String stack = String.Format("{0}{1}", br.Stack.ToUpper()[0], br.Stack.ToLower().Substring(1));
-            String secretKey = "";
+            String secretKey = File.ReadAllText("../../../secret.txt");
             //String url = String.Format("https://appsvcbuildfunc.azurewebsites.net/api/Http{0}Pipeline?code={1}", stack, secretKey);
             //String url = String.Format("http://localhost:7071/api/Http{0}Pipeline", stack);
-            //String url = String.Format("https://appsvcbuildfunc-test.azurewebsites.net/api/HttpBuildPipeline_HttpStart?code={0}", secretKey);
-            String url = "http://localhost:7071/api/HttpBuildPipeline_HttpStart";
+            String url = String.Format("https://appsvcbuildfunc-test.azurewebsites.net/api/HttpBuildPipeline_HttpStart?code={0}", secretKey);
+            //String url = "http://localhost:7071/api/HttpBuildPipeline_HttpStart";
 
             String body = JsonConvert.SerializeObject(br);
             var client = new RestClient(url);
@@ -67,6 +67,10 @@ namespace appsvcbuildconsole
             request.AddParameter("undefined", body, ParameterType.RequestBody);
             IRestResponse response = client.Execute(request);
             Console.WriteLine(response.StatusCode.ToString());
+            if (!response.StatusCode.ToString().ToLower().Contains("accepted"))
+            {
+                return;
+            }
             //Console.WriteLine(response.Content.ToString());
 
             var result = JsonConvert.DeserializeObject<dynamic>(response.Content.ToString());
