@@ -2,6 +2,7 @@
     {
         "stack": "kudu",
         "templateRepoURL": "https://github.com/Azure-App-Service/kudu.git",
-        "templateRepoBranchName": "dev"
+        "templateRepoBranchName": "dev",
+        "outputImageName": "kudu:latest"
     }
 ]

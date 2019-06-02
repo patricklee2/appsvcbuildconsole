@@ -7,7 +7,7 @@ secret.txt
 local.settings.json
 
 # debug settings
-Properties/launchSettings.json
+Properties
 
 # User-specific files
 *.suo

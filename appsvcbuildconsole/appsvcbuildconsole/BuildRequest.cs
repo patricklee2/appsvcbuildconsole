@@ -48,21 +48,6 @@ namespace appsvcbuildconsole
         [JsonProperty("webAppName")]
         public string WebAppName;
 
-        [JsonProperty("rubyBaseOutputRepoURL")]
-        public string RubyBaseOutputRepoURL;
-
-        [JsonProperty("rubyBaseOutputRepoName")]
-        public string RubyBaseOutputRepoName;
-
-        [JsonProperty("rubyBaseOutputRepoOrgName")]
-        public string RubyBaseOutputRepoOrgName;
-
-        [JsonProperty("rubyBaseOutputRepoBranchName")]
-        public string RubyBaseOutputRepoBranchName;
-
-        [JsonProperty("rubyBaseOutputImageName")]
-        public string RubyBaseOutputImageName;
-
         [JsonProperty("email")]
         public string Email;
 
@@ -102,16 +87,42 @@ namespace appsvcbuildconsole
         [JsonProperty("testWebAppName")]
         public string TestWebAppName;
 
+        [JsonProperty("xdebugTemplateRepoURL")]
+        public string XdebugTemplateRepoURL;
+
+        [JsonProperty("xdebugTemplateRepoOrgName")]
+        public string XdebugTemplateRepoOrgName;
+
+        [JsonProperty("xdebugTemplateRepoName")]
+        public string XdebugTemplateRepoName;
+
+        [JsonProperty("xdebugTemplateName")]
+        public string XdebugTemplateName;
+
+        [JsonProperty("xdebugTemplateRepoBranchName")]
+        public string XdebugTemplateRepoBranchName;
+
+        [JsonProperty("xdebugBaseImageName")]
+        public string XdebugBaseImageName;
+
+        [JsonProperty("xdebugOutputRepoURL")]
+        public string XdebugOutputRepoURL;
+
+        [JsonProperty("xdebugOutputRepoName")]
+        public string XdebugOutputRepoName;
+
+        [JsonProperty("xdebugOutputRepoOrgName")]
+        public string XdebugOutputRepoOrgName;
+
+        [JsonProperty("xdebugOutputRepoBranchName")]
+        public string XdebugOutputRepoBranchName;
+
+        [JsonProperty("xdebugOutputImageName")]
+        public string XdebugOutputImageName;
+
         private static String getDotnetcoreTemplate(String version)
         {
-            if (version.StartsWith("1"))
-            {
-                return "debian-8";
-            }
-            else
-            {
-                return "debian-9";
-            }
+            return "debian-9";
         }
 
         private static String getNodeTemplate(String version)
@@ -121,13 +132,23 @@ namespace appsvcbuildconsole
 
         private static String getPhpTemplate(String version)
         {
+            return "template-apache";
+        }
 
-            if (new List<String> { "5.6", "7.0", "7.2", "7.3" }.Contains(version))
+        private static String getPhpXdebugTemplate(String version)
+        {
+            if (version.StartsWith("7"))
             {
-                return String.Format("template-{0}-apache", version);
+                return "template-php7-apache-xdebug";
             }
-
-            throw new Exception(String.Format("unexpected php version: {0}", version));
+            else if (version.StartsWith("5"))
+            {
+                return "template-php5-apache-xdebug";
+            }
+            else
+            {
+                throw new Exception(String.Format("unexpected php version: {0}", version));
+            }
         }
 
         private static String getPythonTemplate(String version)
@@ -142,7 +163,7 @@ namespace appsvcbuildconsole
 
         private static String getRubyTemplate(String version)
         {
-            return "templates";
+            return "template";
         }
 
         private static String getTemplate(String stack, String version)
@@ -166,6 +187,10 @@ namespace appsvcbuildconsole
             if (stack == "ruby")
             {
                 return getRubyTemplate(version);
+            }
+            if (stack == "kudu")
+            {
+                return "kudu";
             }
 
             throw new Exception(String.Format("unexpected stack: {0}", stack));
@@ -193,6 +218,10 @@ namespace appsvcbuildconsole
             {
                 return "TestAppTemplate";
             }
+            if (stack == "kudu")
+            {
+                return "kudu";
+            }
 
             throw new Exception(String.Format("unexpected stack: {0}", stack));
         }
@@ -204,9 +233,13 @@ namespace appsvcbuildconsole
                 throw new Exception("missing stack");
             }
             Stack = Stack.ToLower();
-            if (Version == null)
+            if (Version == null && !Stack.Equals("kudu"))
             {
                 throw new Exception("missing version");
+            }
+            else if (Stack.Equals("kudu"))
+            {
+                Version = "0";
             }
             if (TemplateRepoURL == null)
             {
@@ -270,11 +303,13 @@ namespace appsvcbuildconsole
             }
             if (TestTemplateRepoName == null)
             {
-                TestTemplateRepoName = TemplateRepoName;
+                String[] splitted = TestTemplateRepoURL.Split('/');
+                TestTemplateRepoName = splitted[splitted.Length - 1].Replace(".git", ""); ;
             }
             if (TestTemplateRepoOrgName == null)
             {
-                TestTemplateRepoOrgName = TemplateRepoOrgName;
+                String[] splitted = TestTemplateRepoURL.Split('/');
+                TestTemplateRepoOrgName = splitted[splitted.Length - 2].Replace(".git", ""); ;
             }
             if (TestTemplateName == null)
             {
@@ -314,27 +349,53 @@ namespace appsvcbuildconsole
             {
                 TestWebAppName = String.Format("appsvcbuild-{0}-app-{1}-site", Stack, Version.Replace(".", "-"));
             }
-            if (RubyBaseOutputRepoURL == null)
+            if (XdebugTemplateRepoURL == null)
             {
-                RubyBaseOutputRepoURL = String.Format("https://github.com/blessedimagepipeline/rubybase-{0}.git", Version);
+                XdebugTemplateRepoURL = TemplateRepoURL;
             }
-            if (RubyBaseOutputRepoName == null)
+            if (XdebugTemplateRepoName == null)
             {
-                String[] splitted = RubyBaseOutputRepoURL.Split('/');
-                RubyBaseOutputRepoName = splitted[splitted.Length - 1].Replace(".git", "");
+                String[] splitted = XdebugTemplateRepoURL.Split('/');
+                XdebugTemplateRepoName = splitted[splitted.Length - 1].Replace(".git", "");
             }
-            if (RubyBaseOutputRepoOrgName == null)
+            if (XdebugTemplateRepoOrgName == null)
             {
-                String[] splitted = RubyBaseOutputRepoURL.Split('/');
-                RubyBaseOutputRepoOrgName = splitted[splitted.Length - 2];
+                String[] splitted = XdebugTemplateRepoURL.Split('/');
+                XdebugTemplateRepoOrgName = splitted[splitted.Length - 2].Replace(".git", "");
             }
-            if (RubyBaseOutputRepoBranchName == null)
+            if (XdebugTemplateName == null)
             {
-                RubyBaseOutputRepoBranchName = "master";
+                XdebugTemplateName = "template-apache-xdebug";
             }
-            if (RubyBaseOutputImageName == null)
+            if (XdebugTemplateRepoBranchName == null)
             {
-                RubyBaseOutputImageName = String.Format("rubybase:{0}", Version);
+                XdebugTemplateRepoBranchName = TemplateRepoBranchName;
+            }
+            if (XdebugBaseImageName == null)
+            {
+                XdebugBaseImageName = OutputImageName;
+            }
+            if (XdebugOutputRepoURL == null)
+            {
+                XdebugOutputRepoURL = String.Format("https://github.com/blessedimagepipeline/{0}-xdebug-{1}.git", Stack, Version);
+            }
+            if (XdebugOutputRepoName == null)
+            {
+                String[] splitted = XdebugOutputRepoURL.Split('/');
+                XdebugOutputRepoName = splitted[splitted.Length - 1].Replace(".git", "");
+            }
+            if (XdebugOutputRepoOrgName == null)
+            {
+                String[] splitted = XdebugOutputRepoURL.Split('/');
+                XdebugOutputRepoOrgName = splitted[splitted.Length - 2];
+            }
+            if (XdebugOutputRepoBranchName == null)
+            {
+                XdebugOutputRepoBranchName = "master";
+            }
+            if (XdebugOutputImageName == null)
+            {
+                XdebugOutputImageName = String.Format("{0}xdebug:{1}", Stack, Version);
             }
         }
     }
